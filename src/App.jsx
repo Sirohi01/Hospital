@@ -18,7 +18,8 @@ import NurseStation from './components/NurseStation';
 import OperationTheatre from './components/OperationTheatre';
 import EquipmentMaintenance from "./components/EquipmentMaintenance";
 import AssetsManagement from './components/AssetsManagement';
-import { FaTint,FaHome, FaUserPlus, FaCalendarAlt, FaFileInvoiceDollar, FaFlask, FaPills, FaIdCard, FaAmbulance, FaComment, FaDAndD, FaUserNurse, FaNutritionix, FaServer, FaAssistiveListeningSystems } from 'react-icons/fa';
+import Patients from './components/Patients';
+import { FaTint,FaHome, FaUserPlus,FaUser, FaCalendarAlt, FaFileInvoiceDollar, FaFlask, FaPills, FaIdCard, FaAmbulance, FaComment, FaDAndD, FaUserNurse, FaNutritionix, FaServer, FaAssistiveListeningSystems } from 'react-icons/fa';
 import { FaA, FaAccessibleIcon, FaBandage, FaBookMedical, FaBowlFood } from 'react-icons/fa6';
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/patient-registration" element={<PatientRegistration />} />
+              <Route path="/all-patient" element={<Patients />} />
               <Route path="/appointments" element={<AppointmentScheduling />} />
               <Route path="/billing" element={<Billing />} />
               <Route path="/laboratory" element={<LaboratoryManagement />} />
@@ -70,6 +72,9 @@ function Sidebar() {
         </Link>
         <Link to="/patient-registration" className={`nav-link ${location.pathname === '/patient-registration' ? 'active' : ''}`}>
           <FaUserPlus className="nav-icon" /> Patient Registration
+        </Link>
+        <Link to="/all-patient" className={`nav-link ${location.pathname === '/all-patient' ? 'active' : ''}`}>
+          <FaUser className="nav-icon" />Registered Patients
         </Link>
         <Link to="/appointments" className={`nav-link ${location.pathname === '/appointments' ? 'active' : ''}`}>
           <FaCalendarAlt className="nav-icon" /> Appointments

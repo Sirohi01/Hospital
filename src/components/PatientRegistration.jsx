@@ -15,34 +15,351 @@ import { GiHealthNormal } from 'react-icons/gi';
 import '../styles/PatientRegistration.css';
 import { registerPatient } from '../services/patientService';
 
-function PatientRegistration() {
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    dob: '',
-    gender: '',
-    contactNumber: '',
-    email: '',
-    address: '',
-    city: '',
-    state: '',
-    zipCode: '',
-    bloodGroup: '',
-    allergies: '',
-    medicalHistory: '',
-    currentMedications: '',
-    primaryPhysician: '',
-    emergencyContactName: '',
-    emergencyContactNumber: '',
-    insuranceProvider: '',
-    insuranceNumber: '',
-    policyStartDate: '',
-    policyEndDate: ''
-  });
+// Reusable FormInput Component
+const FormInput = ({ 
+  label, 
+  name, 
+  type = 'text', 
+  value, 
+  onChange, 
+  required = false, 
+  placeholder = '', 
+  icon: Icon,
+  options = [],
+  rows = 3,
+  className = ''
+}) => {
+  const renderInput = () => {
+    switch (type) {
+      case 'select':
+        return (
+          <select
+            name={name}
+            className={`form-input ${className}`}
+            value={value}
+            onChange={onChange}
+            required={required}
+          >
+            <option value="">{placeholder || `Select ${label}`}</option>
+            {options.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        );
+      
+      case 'textarea':
+        return (
+          <textarea
+            name={name}
+            className={`form-input ${className}`}
+            rows={rows}
+            value={value}
+            onChange={onChange}
+            placeholder={placeholder}
+            required={required}
+          />
+        );
+      
+      default:
+        return (
+          <input
+            type={type}
+            name={name}
+            className={`form-input ${className}`}
+            value={value}
+            onChange={onChange}
+            placeholder={placeholder}
+            required={required}
+          />
+        );
+    }
+  };
 
+  return (
+    <div className={`form-group ${className.includes('full-width') ? 'full-width' : ''}`}>
+      <label className="form-label">
+        {Icon && <Icon className="input-icon" />}
+        {label} {required && '*'}
+      </label>
+      {renderInput()}
+    </div>
+  );
+};
+
+// Reusable FormSection Component
+const FormSection = ({ title, icon: Icon, children, className = '' }) => {
+  return (
+    <div className={`form-section ${className}`}>
+      <div className="section-header">
+        {Icon && <Icon className="section-icon" />}
+        <h3>{title}</h3>
+      </div>
+      <div className="form-grid">
+        {children}
+      </div>
+    </div>
+  );
+};
+
+// Reusable TabNavigation Component
+const TabNavigation = ({ tabs, activeTab, onTabChange }) => {
+  return (
+    <div className="tabs">
+      {tabs.map((tab) => {
+        const Icon = tab.icon;
+        return (
+          <button
+            key={tab.id}
+            type="button"
+            className={`tab ${activeTab === tab.id ? 'active' : ''}`}
+            onClick={() => onTabChange(tab.id)}
+          >
+            <Icon className="tab-icon" />
+            <span className="tab-label">{tab.label}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+};
+
+// Reusable MessageDisplay Component
+const MessageDisplay = ({ successMessage, errorMessage }) => {
+  return (
+    <>
+      {successMessage && (
+        <div className="success-message">{successMessage}</div>
+      )}
+      {errorMessage && (
+        <div className="error-message">{errorMessage}</div>
+      )}
+    </>
+  );
+};
+
+// Configuration
+const TABS_CONFIG = [
+  {
+    id: 'personal',
+    label: 'Personal',
+    icon: FaUserPlus
+  },
+  {
+    id: 'contact',
+    label: 'Contact',
+    icon: FaPhone
+  },
+  {
+    id: 'medical',
+    label: 'Medical',
+    icon: FaNotesMedical
+  },
+  {
+    id: 'insurance',
+    label: 'Insurance',
+    icon: FaUserShield
+  }
+];
+
+const FORM_FIELDS = {
+  personal: [
+    {
+      name: 'firstName',
+      label: 'First Name',
+      type: 'text',
+      required: true,
+      icon: FaUserPlus
+    },
+    {
+      name: 'lastName',
+      label: 'Last Name',
+      type: 'text',
+      required: true,
+      icon: FaUserPlus
+    },
+    {
+      name: 'dob',
+      label: 'Date of Birth',
+      type: 'date',
+      required: true,
+      icon: FaBirthdayCake
+    },
+    {
+      name: 'gender',
+      label: 'Gender',
+      type: 'select',
+      required: true,
+      icon: FaUserPlus,
+      options: [
+        { value: 'Male', label: 'Male' },
+        { value: 'Female', label: 'Female' },
+        { value: 'Non-binary', label: 'Non-binary' },
+        { value: 'Other', label: 'Other' },
+        { value: 'Prefer not to say', label: 'Prefer not to say' }
+      ]
+    }
+  ],
+  
+  contact: [
+    {
+      name: 'contactNumber',
+      label: 'Contact Number',
+      type: 'tel',
+      required: true,
+      icon: FaPhone
+    },
+    {
+      name: 'email',
+      label: 'Email',
+      type: 'email',
+      icon: FaEnvelope
+    },
+    {
+      name: 'address',
+      label: 'Address',
+      type: 'text',
+      icon: FaMapMarkerAlt,
+      className: 'full-width'
+    },
+    {
+      name: 'city',
+      label: 'City',
+      type: 'text'
+    },
+    {
+      name: 'state',
+      label: 'State',
+      type: 'text'
+    },
+    {
+      name: 'zipCode',
+      label: 'ZIP Code',
+      type: 'text'
+    }
+  ],
+  
+  medical: [
+    {
+      name: 'bloodGroup',
+      label: 'Blood Group',
+      type: 'select',
+      icon: FaClinicMedical,
+      options: [
+        { value: 'A+', label: 'A+' },
+        { value: 'A-', label: 'A-' },
+        { value: 'B+', label: 'B+' },
+        { value: 'B-', label: 'B-' },
+        { value: 'AB+', label: 'AB+' },
+        { value: 'AB-', label: 'AB-' },
+        { value: 'O+', label: 'O+' },
+        { value: 'O-', label: 'O-' }
+      ]
+    },
+    {
+      name: 'allergies',
+      label: 'Allergies',
+      type: 'text',
+      icon: FaClinicMedical,
+      placeholder: 'List any allergies'
+    },
+    {
+      name: 'currentMedications',
+      label: 'Current Medications',
+      type: 'text',
+      icon: FaFileMedical,
+      placeholder: 'Current medications'
+    },
+    {
+      name: 'primaryPhysician',
+      label: 'Primary Physician',
+      type: 'text',
+      icon: FaUserPlus,
+      placeholder: "Doctor's name"
+    },
+    {
+      name: 'medicalHistory',
+      label: 'Medical History',
+      type: 'textarea',
+      icon: FaFileMedical,
+      placeholder: 'Any previous medical conditions or surgeries',
+      className: 'full-width',
+      rows: 3
+    },
+    {
+      name: 'emergencyContactName',
+      label: 'Emergency Contact Name',
+      type: 'text',
+      icon: FaPhone
+    },
+    {
+      name: 'emergencyContactNumber',
+      label: 'Emergency Contact Number',
+      type: 'tel',
+      icon: FaPhone
+    }
+  ],
+  
+  insurance: [
+    {
+      name: 'insuranceProvider',
+      label: 'Insurance Provider',
+      type: 'text',
+      icon: FaIdCard
+    },
+    {
+      name: 'insuranceNumber',
+      label: 'Insurance Number',
+      type: 'text',
+      icon: FaIdCard
+    },
+    {
+      name: 'policyStartDate',
+      label: 'Policy Start Date',
+      type: 'date',
+      icon: FaBirthdayCake
+    },
+    {
+      name: 'policyEndDate',
+      label: 'Policy End Date',
+      type: 'date',
+      icon: FaBirthdayCake
+    }
+  ]
+};
+
+const INITIAL_FORM_DATA = {
+  firstName: '',
+  lastName: '',
+  dob: '',
+  gender: '',
+  contactNumber: '',
+  email: '',
+  address: '',
+  city: '',
+  state: '',
+  zipCode: '',
+  bloodGroup: '',
+  allergies: '',
+  medicalHistory: '',
+  currentMedications: '',
+  primaryPhysician: '',
+  emergencyContactName: '',
+  emergencyContactNumber: '',
+  insuranceProvider: '',
+  insuranceNumber: '',
+  policyStartDate: '',
+  policyEndDate: ''
+};
+
+// Custom Hook for Patient Registration Logic
+const usePatientRegistration = () => {
+  const [formData, setFormData] = useState(INITIAL_FORM_DATA);
   const [activeTab, setActiveTab] = useState('personal');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -52,45 +369,77 @@ function PatientRegistration() {
     }));
   };
 
+  const resetForm = () => {
+    setFormData(INITIAL_FORM_DATA);
+    setSuccessMessage('');
+    setErrorMessage('');
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    
     try {
       await registerPatient(formData);
       setSuccessMessage('✅ Patient registration successful!');
       setErrorMessage('');
-
-      // Reset form after 3 seconds
+      
       setTimeout(() => {
-        setFormData({
-          firstName: '',
-          lastName: '',
-          dob: '',
-          gender: '',
-          contactNumber: '',
-          email: '',
-          address: '',
-          city: '',
-          state: '',
-          zipCode: '',
-          bloodGroup: '',
-          allergies: '',
-          medicalHistory: '',
-          currentMedications: '',
-          primaryPhysician: '',
-          emergencyContactName: '',
-          emergencyContactNumber: '',
-          insuranceProvider: '',
-          insuranceNumber: '',
-          policyStartDate: '',
-          policyEndDate: ''
-        });
-        setSuccessMessage('');
+        resetForm();
       }, 3000);
-
     } catch (error) {
-      console.error("API Error:", error);
-      setErrorMessage('❌ Failed to register patient. Please try again.');
+      setErrorMessage('❌ Failed to register patient. Please try again.', error);
+      setSuccessMessage('');
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  return {
+    formData,
+    activeTab,
+    successMessage,
+    errorMessage,
+    isLoading,
+    handleChange,
+    setActiveTab,
+    handleSubmit,
+    resetForm
+  };
+};
+
+// Main PatientRegistration Component
+function PatientRegistration() {
+  const {
+    formData,
+    activeTab,
+    successMessage,
+    errorMessage,
+    isLoading,
+    handleChange,
+    setActiveTab,
+    handleSubmit
+  } = usePatientRegistration();
+
+  const renderFormFields = (fields) => {
+    return fields.map((field) => (
+      <FormInput
+        key={field.name}
+        {...field}
+        value={formData[field.name]}
+        onChange={handleChange}
+      />
+    ));
+  };
+
+  const renderSection = (sectionKey, title, icon) => {
+    if (activeTab !== sectionKey && activeTab !== 'all') return null;
+
+    return (
+      <FormSection title={title} icon={icon}>
+        {renderFormFields(FORM_FIELDS[sectionKey])}
+      </FormSection>
+    );
   };
 
   return (
@@ -100,396 +449,27 @@ function PatientRegistration() {
           <FaUserPlus className="header-icon" />
           Patient Registration
         </h2>
-        <p className="registration-subtitle">Complete all sections to register a new patient</p>
+        <p className="registration-subtitle">
+          Complete all sections to register a new patient
+        </p>
       </div>
 
-      {successMessage && <div className="success-message">{successMessage}</div>}
-      {errorMessage && <div className="error-message">{errorMessage}</div>}
+      <MessageDisplay 
+        successMessage={successMessage} 
+        errorMessage={errorMessage} 
+      />
 
-      <div className="tabs">
-        <button 
-          className={`tab ${activeTab === 'personal' ? 'active' : ''}`}
-          onClick={() => setActiveTab('personal')}
-        >
-          <FaUserPlus className="tab-icon" />
-          Personal Info
-        </button>
-        <button 
-          className={`tab ${activeTab === 'contact' ? 'active' : ''}`}
-          onClick={() => setActiveTab('contact')}
-        >
-          <FaPhone className="tab-icon" />
-          Contact Info
-        </button>
-        <button 
-          className={`tab ${activeTab === 'medical' ? 'active' : ''}`}
-          onClick={() => setActiveTab('medical')}
-        >
-          <FaNotesMedical className="tab-icon" />
-          Medical Info
-        </button>
-        <button 
-          className={`tab ${activeTab === 'insurance' ? 'active' : ''}`}
-          onClick={() => setActiveTab('insurance')}
-        >
-          <FaUserShield className="tab-icon" />
-          Insurance Info
-        </button>
-      </div>
+      <TabNavigation 
+        tabs={TABS_CONFIG}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+      />
 
       <form onSubmit={handleSubmit} className="registration-form">
-        {(activeTab === 'personal' || activeTab === 'all') && (
-          <div className="form-section">
-            <div className="section-header">
-              <GiHealthNormal className="section-icon" />
-              <h3>Personal Information</h3>
-            </div>
-            
-            <div className="form-grid">
-              <div className="form-group">
-                <label className="form-label">
-                  <FaUserPlus className="input-icon" />
-                  First Name *
-                </label>
-                <input
-                  type="text"
-                  name="firstName"
-                  className="form-input"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              
-              <div className="form-group">
-                <label className="form-label">
-                  <FaUserPlus className="input-icon" />
-                  Last Name *
-                </label>
-                <input
-                  type="text"
-                  name="lastName"
-                  className="form-input"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              
-              <div className="form-group">
-                <label className="form-label">
-                  <FaBirthdayCake className="input-icon" />
-                  Date of Birth *
-                </label>
-                <input
-                  type="date"
-                  name="dob"
-                  className="form-input"
-                  value={formData.dob}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              
-              <div className="form-group">
-                <label className="form-label">
-                  <FaUserPlus className="input-icon" />
-                  Gender *
-                </label>
-                <select
-                  name="gender"
-                  className="form-input"
-                  value={formData.gender}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Select Gender</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Non-binary">Non-binary</option>
-                  <option value="Other">Other</option>
-                  <option value="Prefer not to say">Prefer not to say</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        )}
-        
-        {(activeTab === 'contact' || activeTab === 'all') && (
-          <div className="form-section">
-            <div className="section-header">
-              <FaMapMarkerAlt className="section-icon" />
-              <h3>Contact Information</h3>
-            </div>
-            
-            <div className="form-grid">
-              <div className="form-group">
-                <label className="form-label">
-                  <FaPhone className="input-icon" />
-                  Contact Number *
-                </label>
-                <input
-                  type="tel"
-                  name="contactNumber"
-                  className="form-input"
-                  value={formData.contactNumber}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              
-              <div className="form-group">
-                <label className="form-label">
-                  <FaEnvelope className="input-icon" />
-                  Email
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  className="form-input"
-                  value={formData.email}
-                  onChange={handleChange}
-                />
-              </div>
-              
-              <div className="form-group full-width">
-                <label className="form-label">
-                  <FaMapMarkerAlt className="input-icon" />
-                  Address
-                </label>
-                <input
-                  type="text"
-                  name="address"
-                  className="form-input"
-                  value={formData.address}
-                  onChange={handleChange}
-                />
-              </div>
-              
-              <div className="form-group">
-                <label className="form-label">City</label>
-                <input
-                  type="text"
-                  name="city"
-                  className="form-input"
-                  value={formData.city}
-                  onChange={handleChange}
-                />
-              </div>
-              
-              <div className="form-group">
-                <label className="form-label">State</label>
-                <input
-                  type="text"
-                  name="state"
-                  className="form-input"
-                  value={formData.state}
-                  onChange={handleChange}
-                />
-              </div>
-              
-              <div className="form-group">
-                <label className="form-label">ZIP Code</label>
-                <input
-                  type="text"
-                  name="zipCode"
-                  className="form-input"
-                  value={formData.zipCode}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-          </div>
-        )}
-        
-        {(activeTab === 'medical' || activeTab === 'all') && (
-          <div className="form-section">
-            <div className="section-header">
-              <FaNotesMedical className="section-icon" />
-              <h3>Medical Information</h3>
-            </div>
-            
-            <div className="form-grid">
-              <div className="form-group">
-                <label className="form-label">
-                  <FaClinicMedical className="input-icon" />
-                  Blood Group
-                </label>
-                <select
-                  name="bloodGroup"
-                  className="form-input"
-                  value={formData.bloodGroup}
-                  onChange={handleChange}
-                >
-                  <option value="">Select Blood Group</option>
-                  <option value="A+">A+</option>
-                  <option value="A-">A-</option>
-                  <option value="B+">B+</option>
-                  <option value="B-">B-</option>
-                  <option value="AB+">AB+</option>
-                  <option value="AB-">AB-</option>
-                  <option value="O+">O+</option>
-                  <option value="O-">O-</option>
-                </select>
-              </div>
-              
-              <div className="form-group">
-                <label className="form-label">
-                  <FaClinicMedical className="input-icon" />
-                  Allergies
-                </label>
-                <input
-                  type="text"
-                  name="allergies"
-                  className="form-input"
-                  value={formData.allergies}
-                  onChange={handleChange}
-                  placeholder="List any allergies"
-                />
-              </div>
-              
-              <div className="form-group">
-                <label className="form-label">
-                  <FaFileMedical className="input-icon" />
-                  Current Medications
-                </label>
-                <input
-                  type="text"
-                  name="currentMedications"
-                  className="form-input"
-                  value={formData.currentMedications}
-                  onChange={handleChange}
-                  placeholder="Current medications"
-                />
-              </div>
-              
-              <div className="form-group">
-                <label className="form-label">
-                  <FaUserPlus className="input-icon" />
-                  Primary Physician
-                </label>
-                <input
-                  type="text"
-                  name="primaryPhysician"
-                  className="form-input"
-                  value={formData.primaryPhysician}
-                  onChange={handleChange}
-                  placeholder="Doctor's name"
-                />
-              </div>
-              
-              <div className="form-group full-width">
-                <label className="form-label">
-                  <FaFileMedical className="input-icon" />
-                  Medical History
-                </label>
-                <textarea
-                  name="medicalHistory"
-                  className="form-input"
-                  rows="3"
-                  value={formData.medicalHistory}
-                  onChange={handleChange}
-                  placeholder="Any previous medical conditions or surgeries"
-                ></textarea>
-              </div>
-              
-              <div className="form-group">
-                <label className="form-label">
-                  <FaPhone className="input-icon" />
-                  Emergency Contact Name
-                </label>
-                <input
-                  type="text"
-                  name="emergencyContactName"
-                  className="form-input"
-                  value={formData.emergencyContactName}
-                  onChange={handleChange}
-                />
-              </div>
-              
-              <div className="form-group">
-                <label className="form-label">
-                  <FaPhone className="input-icon" />
-                  Emergency Contact Number
-                </label>
-                <input
-                  type="tel"
-                  name="emergencyContactNumber"
-                  className="form-input"
-                  value={formData.emergencyContactNumber}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-          </div>
-        )}
-        
-        {(activeTab === 'insurance' || activeTab === 'all') && (
-          <div className="form-section">
-            <div className="section-header">
-              <FaUserShield className="section-icon" />
-              <h3>Insurance Information</h3>
-            </div>
-            
-            <div className="form-grid">
-              <div className="form-group">
-                <label className="form-label">
-                  <FaIdCard className="input-icon" />
-                  Insurance Provider
-                </label>
-                <input
-                  type="text"
-                  name="insuranceProvider"
-                  className="form-input"
-                  value={formData.insuranceProvider}
-                  onChange={handleChange}
-                />
-              </div>
-              
-              <div className="form-group">
-                <label className="form-label">
-                  <FaIdCard className="input-icon" />
-                  Insurance Number
-                </label>
-                <input
-                  type="text"
-                  name="insuranceNumber"
-                  className="form-input"
-                  value={formData.insuranceNumber}
-                  onChange={handleChange}
-                />
-              </div>
-              
-              <div className="form-group">
-                <label className="form-label">
-                  <FaBirthdayCake className="input-icon" />
-                  Policy Start Date
-                </label>
-                <input
-                  type="date"
-                  name="policyStartDate"
-                  className="form-input"
-                  value={formData.policyStartDate}
-                  onChange={handleChange}
-                />
-              </div>
-              
-              <div className="form-group">
-                <label className="form-label">
-                  <FaBirthdayCake className="input-icon" />
-                  Policy End Date
-                </label>
-                <input
-                  type="date"
-                  name="policyEndDate"
-                  className="form-input"
-                  value={formData.policyEndDate}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-          </div>
-        )}
+        {renderSection('personal', 'Personal Information', GiHealthNormal)}
+        {renderSection('contact', 'Contact Information', FaMapMarkerAlt)}
+        {renderSection('medical', 'Medical Information', FaNotesMedical)}
+        {renderSection('insurance', 'Insurance Information', FaUserShield)}
         
         <div className="form-actions">
           {activeTab !== 'all' && (
@@ -497,6 +477,7 @@ function PatientRegistration() {
               type="button" 
               className="secondary-button"
               onClick={() => setActiveTab('all')}
+              disabled={isLoading}
             >
               Show All Sections
             </button>
@@ -504,8 +485,9 @@ function PatientRegistration() {
           <button
             type="submit"
             className="primary-button"
+            disabled={isLoading}
           >
-            Register Patient
+            {isLoading ? 'Registering...' : 'Register Patient'}
           </button>
         </div>
       </form>

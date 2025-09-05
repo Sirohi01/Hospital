@@ -1,249 +1,331 @@
-    /* PatientRegistration.css */
     .registration-container {
-        max-width: 1200px;
-        margin: 2rem auto;
-        padding: 2rem;
-        background-color: #fff;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    background-color: #fff;
     }
-    
+
     .registration-header {
-        margin-bottom: 2rem;
-        text-align: center;
+    text-align: center;
+    margin-bottom: 24px;
+    }
+
+    .registration-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #2c5282;
+    font-size: 28px;
+    margin-bottom: 8px;
+    }
+
+    .header-icon {
+    font-size: 24px;
+    }
+
+    .registration-subtitle {
+    color: #718096;
+    font-size: 16px;
+    }
+
+    /* Tabs Navigation */
+    .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 16px;
+    }
+
+    .tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: #f7fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+    font-weight: 500;
+    }
+
+    .tab:hover {
+    background: #edf2f7;
+    border-color: #cbd5e0;
+    }
+
+    .tab.active {
+    background: #ebf8ff;
+    border-color: #4299e1;
+    color: #2b6cb0;
+    }
+
+    .tab-icon {
+    font-size: 16px;
+    }
+
+    .tab-label {
+    display: inline;
+    }
+
+    /* Form Sections */
+    .form-section {
+    margin-bottom: 32px;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #fff;
+    }
+
+    .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #edf2f7;
+    }
+
+    .section-header h3 {
+    font-size: 18px;
+    color: #2d3748;
+    margin: 0;
+    }
+
+    .section-icon {
+    color: #4299e1;
+    font-size: 18px;
+    }
+
+    /* Form Grid */
+    .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    }
+
+    /* Form Groups */
+    .form-group {
+    display: flex;
+    flex-direction: column;
+    }
+
+    .form-group.full-width {
+    grid-column: 1 / -1;
+    }
+
+    .form-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #4a5568;
+    font-size: 14px;
+    }
+
+    .input-icon {
+    color: #a0aec0;
+    font-size: 14px;
+    }
+
+    /* Form Inputs */
+    .form-input {
+    padding: 10px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.2s;
+    background-color: #fff;
+    }
+
+    .form-input:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+    }
+
+    .form-input::placeholder {
+    color: #a0aec0;
+    }
+
+    textarea.form-input {
+    min-height: 100px;
+    resize: vertical;
+    }
+
+    select.form-input {
+    cursor: pointer;
+    }
+
+    .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
+    }
+
+    .primary-button {
+    padding: 12px 24px;
+    background: #4299e1;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+    }
+
+    .primary-button:hover:not(:disabled) {
+    background: #3182ce;
+    }
+
+    .primary-button:disabled {
+    background: #cbd5e0;
+    cursor: not-allowed;
+    }
+
+    .secondary-button {
+    padding: 12px 24px;
+    background: #e2e8f0;
+    color: #4a5568;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+    }
+
+    .secondary-button:hover:not(:disabled) {
+    background: #cbd5e0;
+    }
+
+    .secondary-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    }
+
+    .success-message {
+    padding: 12px 16px;
+    background: #f0fff4;
+    color: #2f855a;
+    border: 1px solid #9ae6b4;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-weight: 500;
+    }
+
+    .error-message {
+    padding: 12px 16px;
+    background: #fed7d7;
+    color: #c53030;
+    border: 1px solid #feb2b2;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-weight: 500;
+    }
+
+    /* Mobile Responsive Styles */
+    @media (max-width: 768px) {
+    .registration-container {
+        padding: 16px;
     }
     
     .registration-title {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.75rem;
-        font-size: 1.75rem;
-        color: #2c3e50;
-        margin-bottom: 0.5rem;
-    }
-    
-    .header-icon {
-        font-size: 1.5rem;
-        color: #3498db;
-    }
-    
-    .registration-subtitle {
-        color: #7f8c8d;
-        font-size: 1rem;
-    }
-    
-    .success-message {
-        background-color: #e8f5e9;
-        color: #27ae60;
-        padding: 1rem;
-        border-radius: 8px;
-        margin-bottom: 1.5rem;
-        text-align: center;
-        font-weight: 500;
+        font-size: 24px;
+        flex-direction: column;
+        gap: 6px;
     }
     
     .tabs {
-        display: flex;
-        border-bottom: 1px solid #e0e0e0;
-        margin-bottom: 2rem;
-        flex-wrap: wrap;
+        flex-direction: column;
+        gap: 6px;
     }
     
     .tab {
-        padding: 0.75rem 1.5rem;
-        background: none;
-        border: none;
-        cursor: pointer;
-        font-size: 1rem;
-        font-weight: 500;
-        color: #7f8c8d;
-        position: relative;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
+        justify-content: center;
+        padding: 12px;
     }
     
-    .tab:hover {
-        color: #3498db;
-    }
-    
-    .tab.active {
-        color: #3498db;
-    }
-    
-    .tab.active::after {
-        content: '';
-        position: absolute;
-        bottom: -1px;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background-color: #3498db;
-    }
-    
-    .tab-icon {
-        font-size: 0.9rem;
-    }
-    
-    .registration-form {
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-    }
-    
-    .form-section {
-        background-color: #f9f9f9;
-        padding: 1.5rem;
-        border-radius: 10px;
-    }
-    
-    .section-header {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        margin-bottom: 1.5rem;
-        color: #2c3e50;
-    }
-    
-    .section-header h3 {
-        margin: 0;
-        font-size: 1.25rem;
-    }
-    
-    .section-icon {
-        font-size: 1.25rem;
-        color: #3498db;
+    .tab-label {
+        display: inline;
     }
     
     .form-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 1.5rem;
+        grid-template-columns: 1fr;
+        gap: 16px;
     }
     
-    .form-group {
-        margin-bottom: 1rem;
+    .form-section {
+        padding: 16px;
+        margin-bottom: 24px;
     }
     
-    .form-group.full-width {
-        grid-column: 1 / -1;
-    }
-    
-    .form-label {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 0.5rem;
-        font-weight: 500;
-        color: #2c3e50;
-        font-size: 0.95rem;
-    }
-    
-    .input-icon {
-        color: #7f8c8d;
-        font-size: 0.9rem;
-    }
-    
-    .form-input {
-        width: 100%;
-        padding: 0.75rem 1rem;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-        background-color: #fff;
-    }
-    
-    .form-input:focus {
-        outline: none;
-        border-color: #3498db;
-        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-    }
-    
-    .form-input[type="date"] {
-        appearance: none;
-    }
-    
-    textarea.form-input {
-        min-height: 100px;
-        resize: vertical;
-    }
-    
-    select.form-input {
-        appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%237f8c8d' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 1rem center;
-        background-size: 12px;
+    .section-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 6px;
     }
     
     .form-actions {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 1.5rem;
-    }
-    
-    .primary-button {
-        background-color: #3498db;
-        color: white;
-        border: none;
-        padding: 0.75rem 1.5rem;
-        border-radius: 8px;
-        font-size: 1rem;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-    
-    .primary-button:hover {
-        background-color: #2980b9;
-        transform: translateY(-2px);
-    }
-    
-    .secondary-button {
-        background-color: #f5f5f5;
-        color: #3498db;
-        border: 1px solid #ddd;
-        padding: 0.75rem 1.5rem;
-        border-radius: 8px;
-        font-size: 1rem;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-    
-    .secondary-button:hover {
-        background-color: #e3f2fd;
-    }
-    
-    @media (max-width: 768px) {
-        .registration-container {
-        padding: 1rem;
-        }
-        
-        .tabs {
-        overflow-x: auto;
-        flex-wrap: nowrap;
-        padding-bottom: 0.5rem;
-        }
-        
-        .tab {
-        white-space: nowrap;
-        }
-        
-        .form-grid {
-        grid-template-columns: 1fr;
-        }
-        
-        .form-actions {
         flex-direction: column;
-        gap: 1rem;
-        }
-        
-        .primary-button,
-        .secondary-button {
+    }
+    
+    .primary-button,
+    .secondary-button {
         width: 100%;
-        }
+    }
+    }
+
+    @media (max-width: 480px) {
+    .registration-title {
+        font-size: 20px;
+    }
+    
+    .registration-subtitle {
+        font-size: 14px;
+    }
+    
+    .tab {
+        padding: 10px;
+        font-size: 13px;
+    }
+    
+    .form-input {
+        padding: 8px 10px;
+        font-size: 14px;
+    }
+    
+    .primary-button,
+    .secondary-button {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+    }
+
+    .form-input:focus,
+    .tab:focus,
+    .primary-button:focus,
+    .secondary-button:focus {
+    outline: 2px solid #4299e1;
+    outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+    .form-input,
+    .tab,
+    .primary-button,
+    .secondary-button {
+        transition: none;
+    }
     }
