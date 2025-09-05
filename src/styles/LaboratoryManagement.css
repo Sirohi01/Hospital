@@ -1,0 +1,319 @@
+    /* LaboratoryManagement.css */
+    .lab-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    
+    .lab-header {
+        margin-bottom: 2rem;
+    }
+    
+    .lab-header h2 {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 1.75rem;
+        color: #2c3e50;
+    }
+    
+    .lab-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+    
+    .lab-form-container {
+        background-color: #f9f9f9;
+        padding: 1.5rem;
+        border-radius: 10px;
+    }
+    
+    .lab-form-container h3 {
+        margin-bottom: 1.5rem;
+        color: #2c3e50;
+    }
+    
+    .lab-form {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: #2c3e50;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: #3498db;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    }
+    
+    .form-group textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+    
+    .submit-btn {
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+    
+    .submit-btn:hover {
+        background-color: #2980b9;
+        transform: translateY(-2px);
+    }
+    
+    .lab-tests-container {
+        background-color: #f9f9f9;
+        padding: 1.5rem;
+        border-radius: 10px;
+    }
+    
+    .tests-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    .tests-header h3 {
+        color: #2c3e50;
+    }
+    
+    .search-box {
+        position: relative;
+        width: 250px;
+    }
+    
+    .search-box input {
+        width: 100%;
+        padding: 0.75rem 1rem 0.75rem 2.5rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+    }
+    
+    .search-box .search-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #7f8c8d;
+    }
+    
+    .tests-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .test-card {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 1.5rem;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+    
+    .test-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .test-info {
+        display: flex;
+        gap: 1.5rem;
+    }
+    
+    .test-icon {
+        width: 50px;
+        height: 50px;
+        background-color: #3498db;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        flex-shrink: 0;
+    }
+    
+    .test-details {
+        flex: 1;
+    }
+    
+    .test-details h4 {
+        margin: 0 0 0.5rem 0;
+        color: #2c3e50;
+    }
+    
+    .patient-name {
+        margin: 0 0 0.25rem 0;
+        font-weight: 500;
+        color: #2c3e50;
+    }
+    
+    .test-date {
+        margin: 0 0 0.5rem 0;
+        color: #7f8c8d;
+        font-size: 0.9rem;
+    }
+    
+    .test-result {
+        margin: 0.5rem 0;
+        color: #2c3e50;
+        font-size: 0.95rem;
+    }
+    
+    .status-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        margin-top: 0.5rem;
+    }
+    
+    .status-badge.pending {
+        background-color: #fff8e1;
+        color: #f39c12;
+    }
+    
+    .status-badge.completed {
+        background-color: #e8f5e9;
+        color: #27ae60;
+    }
+    
+    .status-badge.critical {
+        background-color: #ffebee;
+        color: #e74c3c;
+    }
+    
+    .test-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        min-width: 120px;
+    }
+    
+    .action-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 1px solid #ddd;
+        background-color: #f5f5f5;
+    }
+    
+    .print-btn {
+        color: #3498db;
+    }
+    
+    .print-btn:hover {
+        background-color: #e3f2fd;
+    }
+    
+    .pdf-btn {
+        color: #e74c3c;
+    }
+    
+    .pdf-btn:hover {
+        background-color: #ffebee;
+    }
+    
+    .edit-btn {
+        color: #f39c12;
+    }
+    
+    .edit-btn:hover {
+        background-color: #fff8e1;
+    }
+    
+    .delete-btn {
+        color: #e74c3c;
+    }
+    
+    .delete-btn:hover {
+        background-color: #ffebee;
+    }
+    
+    .no-tests {
+        text-align: center;
+        padding: 2rem;
+        color: #7f8c8d;
+    }
+    
+    @media (max-width: 992px) {
+        .lab-content {
+        grid-template-columns: 1fr;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .tests-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        }
+        
+        .search-box {
+        width: 100%;
+        }
+        
+        .test-card {
+        flex-direction: column;
+        gap: 1.5rem;
+        }
+        
+        .test-actions {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        }
+        
+        .action-btn {
+        flex: 1;
+        justify-content: center;
+        }
+    }
